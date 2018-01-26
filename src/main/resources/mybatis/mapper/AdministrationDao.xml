@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eric.dao.AdministrationDao">
+    <resultMap id="UserPojo" type="com.eric.pojo.UserPojo">
+        <result column="user_id" property="userId"/>
+        <result column="phone" property="phoneNumber"/>
+        <result column="user_name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="birthday_time" property="birthday"/>
+        <result column="address" property="address"/>
+    </resultMap>
+
+    <resultMap id="ProjectOnePojo" type="com.eric.pojo.ProjectOnePojo">
+        <result column="project_id" property="projectId"/>
+        <result column="project_name" property="projectName"/>
+    </resultMap>
+
+    <resultMap id="ProjectTwoPojo" type="com.eric.pojo.ProjectTwoPojo">
+        <result column="project_id" property="projectId"/>
+        <result column="project_name" property="projectName"/>
+        <result column="price" property="price"/>
+        <result column="once_price" property="oncePrice"/>
+    </resultMap>
+
+    <resultMap id="AdministrationTechnicianPojo" type="com.eric.pojo.AdministrationTechnicianPojo">
+        <result column="user_id" property="userId"/>
+        <result column="phone" property="phoneNumber"/>
+        <result column="name" property="name"/>
+        <result column="grade" property="level"/>
+    </resultMap>
+
+    <resultMap id="CardPojo" type="com.eric.pojo.CardPojo">
+        <result column="id" property="cardId"/>
+        <result column="day" property="limit"/>
+        <result column="create_time" property="beginTime"/>
+        <result column="status" property="status"/>
+        <result column="project_id" property="projectId"/>
+        <result column="process" property="progress"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_id" property="orderId"/>
+    </resultMap>
+
+    <resultMap id="TechnicianPojo" type="com.eric.pojo.TechnicianPojo">
+        <result column="phone" property="phone"/>
+        <result column="name" property="name"/>
+        <result column="grade" property="level"/>
+        <result column="education" property="grad"/>
+        <result column="in_time" property="inTime"/>
+    </resultMap>
+
+    <resultMap id="StockOnePojo" type="com.eric.pojo.StockOnePojo">
+        <result column="id" property="id"/>
+        <result column="project_name" property="name"/>
+    </resultMap>
+
+    <resultMap id="StockTwoPojo" type="com.eric.pojo.StockTwoPojo">
+        <result column="id" property="id"/>
+        <result column="number" property="id"/>
+        <result column="project_name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="end_time" property="endTime"/>
+        <result column="price" property="price"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="one_id" property="oneId"/>
+    </resultMap>
+
+    <resultMap id="StoreInfoPojo" type="com.eric.pojo.StoreInfoPojo">
+        <result column="user_name" property="name"/>
+        <result column="user_id" property="storeId"/>
+        <result column="user_password" property="password"/>
+    </resultMap>
+
+    <resultMap id="AchievementPojo" type="com.eric.pojo.AchievementPojo">
+        <result column="card_id" property="cardId"/>
+        <result column="card_type" property="cardType"/>
+        <result column="create_time" property="time"/>
+        <result column="project_name" property="projectName"/>
+        <result column="price" property="price"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="reason" property="reason"/>
+        <result column="technicians_name" property="techniciansName"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <resultMap id="ScoreDetailPojo" type="com.eric.pojo.ScoreDetailPojo">
+        <result column="score" property="scoreChange"/>
+        <result column="reason" property="projectName"/>
+        <result column="create_time" property="time"/>
+    </resultMap>
+
+    <resultMap id="ConsumptionDetailPojo" type="com.eric.pojo.ConsumptionDetailPojo">
+        <result column="project_name" property="projectName"/>
+        <result column="day" property="limit"/>
+        <result column="process" property="progress"/>
+        <result column="price" property="fee"/>
+        <result column="create_time" property="time"/>
+        <result column="reason" property="reason"/>
+    </resultMap>
+
+    <resultMap id="ConsumptionDetails" type="com.eric.pojo.TechnicianDetailedPojo">
+        <result column="user_id" property="userId"/>
+        <result column="project_name" property="projectName"/>
+        <result column="once_fee" property="fee"/>
+        <result column="create_time" property="date"/>
+    </resultMap>
+
+    <resultMap id="OrderDetails" type="com.eric.pojo.TechnicianDetailedPojo">
+        <result column="user_id" property="userId"/>
+        <result column="renew_project" property="projectId"/>
+        <result column="price" property="fee"/>
+        <result column="create_time" property="date"/>
+        <result column="type" property="typeTmep"/>
+    </resultMap>
+
+    <resultMap id="OutInDetailPojoStore" type="com.eric.pojo.OutInDetailPojo">
+        <result column="count" property="count"/>
+        <result column="two_id" property="number"/>
+        <result column="one_name" property="oneName"/>
+        <result column="operation" property="operation"/>
+        <result column="reason" property="reason"/>
+        <result column="two_name" property="twoName"/>
+        <result column="create_time" property="time"/>
+        <result column="price" property="inPrice"/>
+    </resultMap>
+
+    <resultMap id="StoreInPojo" type="com.eric.pojo.StoreInPojo">
+        <result column="one_name" property="oneName"/>
+        <result column="two_name" property="twoName"/>
+        <result column="count" property="count"/>
+        <result column="out_price" property="fee"/>
+    </resultMap>
+
+    <resultMap id="OutInDetailPojo" type="com.eric.pojo.OutInDetailPojo">
+        <result column="price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="count" property="count"/>
+        <result column="two_id" property="number"/>
+        <result column="one_name" property="oneName"/>
+        <result column="operation" property="operation"/>
+        <result column="reason" property="reason"/>
+        <result column="two_name" property="twoName"/>
+        <result column="create_time" property="time"/>
+        <result column="store_id" property="storeId"/>
+    </resultMap>
+
+    <select id="getUserListWithPage" resultMap="UserPojo">
+        SELECT user_id, phone, user_name, sex, birthday_time
+        FROM users
+        WHERE store_id = #{userId}
+        ORDER BY birthday_time DESC
+        limit #{page}
+    </select>
+
+    <select id="queryUserCount" resultType="int">
+        SELECT COUNT(*) FROM users WHERE store_id = #{userId}
+    </select>
+
+    <select id="queryUser" resultType="int">
+        SELECT COUNT(*) FROM users WHERE phone = #{phone} AND store_id = #{storeId}
+    </select>
+
+    <insert id="insertUserInfo">
+        INSERT INTO users(
+        store_id, phone, user_name, sex, birthday_time, create_time, update_time
+        )
+        VALUES (
+        #{storeId}, #{phone}, #{name}, #{sex}, #{birthday}, now(), now()
+        )
+    </insert>
+
+    <select id="getUserId" resultType="int">
+        SELECT id
+        FROM users
+        WHERE phone = #{phone}
+        AND store_id = #{storeId}
+    </select>
+
+    <update id="updateUserId">
+        UPDATE users
+        SET user_id = #{userId}
+        WHERE phone = #{phone}
+        AND id = #{userId}
+    </update>
+
+    <insert id="insertBaby">
+        INSERT INTO babys(
+        user_id, birthday, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{birthday}, now(), now()
+        )
+    </insert>
+
+    <select id="getProjectOneList" resultMap="ProjectOnePojo">
+        SELECT project_id, project_name
+        FROM one_projects
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getProjectTwoList" resultMap="ProjectTwoPojo">
+        SELECT project_id, project_name, price, once_price
+        FROM two_projects
+        WHERE user_id = #{userId}
+        AND one_project_id = #{oneProjectId}
+        AND status = 0
+    </select>
+
+    <select id="getTechnicianList" resultMap="AdministrationTechnicianPojo">
+        SELECT user_id, phone, name, grade
+        FROM technicians
+        WHERE store_id = #{storeId}
+    </select>
+
+    <select id="queryCustomerWithPhone" resultMap="UserPojo">
+        SELECT user_id, phone, user_name, sex, birthday_time
+        FROM users
+        WHERE store_id = #{storeId}
+        AND phone = #{phone}
+        limit 1
+    </select>
+
+    <insert id="insertOrder">
+        INSERT INTO orders
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="giveProject != null">
+                give_project,
+            </if>
+            <if test="courseOfTreatment != null">
+                course_of_treatment,
+            </if>
+            <if test="day != null">
+                day,
+            </if>
+            <if test="technicianId != null">
+                technician_id,
+            </if>
+            <if test="reason != null">
+                reason,
+            </if>
+            <if test="giveCardId != null">
+                give_card_id,
+            </if>
+            shop_point,
+            user_id,
+            store_id,
+            renew_project,
+            price,
+            point,
+            type,
+            status,
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="giveProject != null">
+                #{giveProject},
+            </if>
+            <if test="courseOfTreatment != null">
+                #{courseOfTreatment},
+            </if>
+            <if test="day != null">
+                #{day},
+            </if>
+            <if test="technicianId != null">
+                #{technicianId},
+            </if>
+            <if test="reason != null">
+                #{reason},
+            </if>
+            <if test="giveCardId != null">
+                #{giveCardId},
+            </if>
+            #{shopPoint},
+            #{userId},
+            #{storeId},
+            #{renewProject},
+            #{price},
+            #{point},
+            #{type},
+            0,
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <select id="queryOrderId" resultType="String">
+        SELECT id
+        FROM orders
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND status = 0
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <update id="updateOrder">
+        UPDATE orders
+        SET status = 1, update_time = now()
+        WHERE id = #{orderId}
+    </update>
+
+    <select id="queryUserInfoWithUserId" resultMap="UserPojo">
+        SELECT user_id, phone, user_name, sex, birthday_time, address
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getBabyBirthday" resultType="Date">
+        SELECT birthday
+        FROM babys
+        WHERE user_id = #{userId}
+        ORDER BY update_time DESC
+        limit 1
+    </select>
+
+    <select id="queryTimeCard" resultMap="CardPojo">
+        SELECT id, day, create_time, status, project_id
+        FROM time_cards
+        WHERE user_id = #{userId}
+        AND status != 1
+    </select>
+
+    <select id="queryTimeCardList" resultMap="CardPojo">
+        SELECT id, day, create_time, status, project_id, user_id, order_id
+        FROM time_cards
+        WHERE store_id = #{storeId}
+        AND status != 1
+    </select>
+
+    <select id="getProjectName" resultType="String">
+        SELECT project_name
+        FROM two_projects
+        WHERE project_id = #{projectId}
+    </select>
+
+    <select id="queryCurseCard" resultMap="CardPojo">
+        SELECT id, day, create_time, status, project_id, process
+        FROM process_cards
+        WHERE user_id = #{userId}
+        AND status != 1
+    </select>
+
+    <select id="queryCardList" resultMap="CardPojo">
+        SELECT id, day, create_time, status, project_id, process, user_id, order_id
+        FROM process_cards
+        WHERE store_id = #{storeId}
+        AND status != 1
+    </select>
+
+    <update id="updateUserInfo">
+        UPDATE users
+        SET phone = #{phone}, user_name = #{name}, sex = #{sex}, birthday_time = #{birthday}, address = #{address}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateBabyInfo">
+        UPDATE babys
+        SET birthday = #{birthday}
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="getLastId" resultType="Integer">
+        SELECT id
+        FROM one_projects
+        order by id DESC
+        limit 1
+    </select>
+
+    <insert id="insertOneProject">
+        INSERT INTO one_projects(
+        project_id, project_name, user_id, create_time, update_time
+        )
+        VALUES (
+        #{projectId}, #{name}, #{storeId}, now(), now()
+        )
+    </insert>
+
+    <select id="getTwoProjectIdLast" resultType="Integer">
+        SELECT id
+        FROM two_projects
+        order by id DESC
+        limit 1
+    </select>
+
+    <insert id="insertTwoProject">
+        INSERT INTO two_projects(
+        project_id, one_project_id, project_name, user_id, price, once_price, create_time, update_time
+        )
+        VALUES (
+        #{projectId}, #{oneProjectId}, #{name}, #{storeId}, #{price}, #{oncePrice}, now(), now()
+        )
+    </insert>
+
+    <select id="queryTechnicianInfo" resultMap="TechnicianPojo">
+        SELECT phone, name, grade, education, in_time
+        FROM technicians
+        WHERE user_id = #{technicianId}
+    </select>
+
+    <update id="updateTechnicianInfo">
+        UPDATE technicians
+        SET phone = #{phone}, name = #{name}, grade = #{level}, education = #{grad}, in_time = #{inTime}, update_time = now()
+        WHERE user_id = #{technicianId}
+    </update>
+
+    <select id="getTechniciansId" resultType="Integer">
+        SELECT id
+        FROM technicians
+        ORDER BY id DESC
+        limit 1
+    </select>
+
+    <insert id="insertTechnicianInfo">
+        INSERT INTO technicians(
+        user_id, store_id, phone, name, grade, create_time, update_time, education, in_time
+        )
+        VALUES (
+        #{id}, #{storeId}, #{phone}, #{name}, #{level}, now(), now(), #{grad}, #{inTime}
+        )
+    </insert>
+
+    <update id="deleteProjectTwo">
+        UPDATE two_projects
+        SET status = 1, update_time = now()
+        WHERE project_id = #{projectId}
+    </update>
+
+    <select id="queryStockOnePojoList" resultMap="StockOnePojo">
+        SELECT id, project_name
+        FROM one_projects_store
+        WHERE store_id = #{storeId}
+    </select>
+
+    <select id="queryStockOnePojoListOfCompany" resultMap="StockOnePojo">
+        SELECT id, project_name
+        FROM one_stock_company
+        WHERE company_id = #{companyId}
+    </select>
+
+    <select id="queryStockTwoPojoList" resultMap="StockTwoPojo">
+        SELECT number, project_name, count, end_time, price
+        FROM two_projects_store
+        WHERE store_id = #{storeId}
+        AND one_project_id = #{id}
+    </select>
+
+    <select id="queryStockTwoPojoListOfCompany" resultMap="StockTwoPojo">
+        SELECT id, project_name, count, end_time, price, out_price
+        FROM two_stock_company
+        WHERE company_id = #{companyId}
+        AND one_id = #{id}
+    </select>
+
+    <select id="querycompanyStockRemain" resultMap="StockTwoPojo">
+        SELECT id, project_name, count, end_time, price, out_price, one_id
+        FROM two_stock_company
+        WHERE company_id = #{companyId}
+    </select>
+
+    <select id="queryStoreInfoPojoList" resultMap="StoreInfoPojo">
+        SELECT user_id, user_password, user_name
+        FROM store
+        WHERE company_id = #{companyId}
+    </select>
+
+    <insert id="insertStoreInfo">
+        INSERT INTO store(
+        user_name, user_id, user_password, company_id, create_time, update_time
+        )
+        VALUES (
+        #{name}, #{storeId}, #{password}, #{companyId}, now(), now()
+        )
+    </insert>
+
+    <select id="queryStoreInfo" resultType="int">
+        SELECT COUNT(*)
+        FROM store
+        WHERE user_id = #{storeId}
+    </select>
+
+    <select id="getAchievementPojoList" resultMap="AchievementPojo">
+        SELECT card_id, card_type, create_time, project_name, price, user_name, user_phone, reason, technicians_id, type
+        FROM achievement
+        WHERE store_id = #{storeId}
+        AND (create_time BETWEEN #{beginTime} and #{endTime})
+    </select>
+
+    <select id="getAchievementPojos" resultType="Double">
+        SELECT price
+        FROM achievement
+        WHERE store_id = #{storeId}
+        AND price != 0
+        AND reason != '退卡'
+        AND date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+    </select>
+
+    <insert id="insertStockOne">
+        INSERT INTO one_stock_company(
+        project_name, company_id, create_time, update_time
+        )
+        VALUES (
+        #{name}, #{companyId}, now(), now()
+        )
+    </insert>
+
+    <insert id="insertCompanyStockTwo">
+        INSERT INTO two_stock_company(
+        one_id, project_name, company_id, price, out_price, count, end_time, create_time, update_time
+        )VALUES (
+        #{id}, #{name}, #{companyId}, #{inPrice}, #{outPrice}, #{number}, #{endTime}, now(), now()
+        )
+    </insert>
+
+    <insert id="insertTimeCard">
+        INSERT INTO time_cards(
+        user_id, store_id, order_id, project_id, day, end_time, status, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{storeId}, #{orderId}, #{renewProject}, #{day}, now(), 0, now(), now()
+        )
+    </insert>
+
+    <insert id="insertCourseCard">
+        INSERT INTO process_cards(
+        user_id, store_id, order_id, project_id, day, process, status, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{storeId}, #{orderId}, #{renewProject}, #{courseOfTreatment}, 0, 0, now(), now()
+        )
+    </insert>
+
+    <insert id="insertScoreFlow">
+        INSERT INTO score_detail(
+        user_id, score, reason, type, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{storePoint}, #{projectName}, #{type}, now(), now()
+        )
+    </insert>
+
+    <select id="getScoreDetailList" resultMap="ScoreDetailPojo">
+        SELECT score, reason, create_time
+        FROM score_detail
+        WHERE user_id = #{userId}
+        AND type = #{type}
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insertConsumptionDetail">
+        INSERT INTO consumption_detail(
+        user_id, project_name, day, process, price, create_time, update_time, technician_id, once_fee, reason, order_id
+        )
+        VALUES (
+        #{userId}, #{projectName}, #{day}, #{process}, #{price}, now(), now(), #{technicianId}, #{fee}, #{reason}, #{orderId}
+        )
+    </insert>
+
+    <select id="getConsumptionDetailList" resultMap="ConsumptionDetailPojo">
+        SELECT project_name, day, process, price, create_time, reason
+        FROM consumption_detail
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="updateProcessCard">
+        UPDATE process_cards
+        SET process = process + 1
+        WHERE id = #{cardId}
+    </update>
+
+    <select id="getProcessCardProjectId" resultType="String">
+        SELECT project_id
+        FROM process_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getProcessCardLimit" resultType="Integer">
+        SELECT day
+        FROM process_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getProcessCardProcess" resultType="Integer">
+        SELECT process
+        FROM process_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getTimeCardProjectId" resultType="String">
+        SELECT project_id
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getTimeCardLimit" resultType="Integer">
+        SELECT day
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getTimeCardCreateTime" resultType="Date">
+        SELECT create_time
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getTimeCardStatus" resultType="Integer">
+        SELECT status
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getCardStatus" resultType="Integer">
+        SELECT status
+        FROM process_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <update id="updateTimeCardStatus">
+        UPDATE time_cards
+        SET status = #{type}, update_time = now()
+        WHERE id = #{cardId}
+    </update>
+
+    <update id="updateCardStatus">
+        UPDATE process_cards
+        SET status = #{type}, update_time = now()
+        WHERE id = #{cardId}
+    </update>
+
+    <select id="getUpdateTime" resultType="Date">
+        SELECT update_time
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <update id="updateCreateTime">
+        UPDATE time_cards
+        SET create_time = #{createTime}, update_time = now()
+        WHERE id = #{cardId}
+    </update>
+
+    <select id="getOrderFeeList" resultType="Double">
+        SELECT price
+        FROM orders
+        WHERE technician_id = #{id}
+        AND date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+    </select>
+
+    <select id="getTotalOrderFeeList" resultType="Double">
+        SELECT price
+        FROM orders
+        WHERE technician_id = #{id}
+    </select>
+
+    <select id="getOnceFeeList" resultType="Double">
+        SELECT once_fee
+        FROM consumption_detail
+        WHERE technician_id = #{id}
+        AND date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+    </select>
+
+    <select id="getTotalOnceFeeList" resultType="Double">
+        SELECT once_fee
+        FROM consumption_detail
+        WHERE technician_id = #{id}
+    </select>
+
+    <select id="getProjectFee" resultType="Double">
+        SELECT once_price
+        FROM two_projects
+        WHERE project_id = #{projectId}
+    </select>
+
+    <select id="getConsumptionDetails" resultMap="ConsumptionDetails">
+        SELECT user_id, project_name, once_fee, create_time
+        FROM consumption_detail
+        WHERE technician_id = #{technicianId}
+        AND (create_time BETWEEN #{beginTime} and #{endTime})
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getOrderDetails" resultMap="OrderDetails">
+        SELECT user_id, renew_project, price, create_time, type
+        FROM orders
+        WHERE technician_id = #{technicianId}
+        AND (create_time BETWEEN #{beginTime} and #{endTime})
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insertOutInCompany">
+        INSERT INTO stock_out_in_company(
+        two_id, store_id, count, operation, create_time, update_time, company_id, one_id, one_name, two_name, out_price, reason, price
+        )
+        VALUES (
+        #{id}, #{storeId}, #{number}, #{opr}, now(), now(), #{companyId}, #{oneId}, #{oneName}, #{twoName}, #{outPrice}, #{reason}, #{inPrice}
+        )
+    </insert>
+
+    <select id="getOneName" resultType="String">
+        SELECT project_name
+        FROM one_projects
+        WHERE project_id = #{id}
+    </select>
+
+    <select id="getOutInDetailPojoList" resultMap="OutInDetailPojoStore">
+        SELECT count, price, two_id, one_name, operation, reason, two_name, create_time
+        FROM stock_out_in_store
+        WHERE store_id = #{storeId}
+        AND (create_time BETWEEN #{beginTime} and #{endTime})
+    </select>
+
+    <select id="queryOneId" resultType="String">
+        SELECT one_id
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryOneName" resultType="String">
+        SELECT project_name
+        FROM one_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryTwoName" resultType="String">
+        SELECT project_name
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryOutPrice" resultType="Double">
+        SELECT out_price
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryInPrice" resultType="Double">
+        SELECT price
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryStoreInPojo" resultMap="StoreInPojo">
+        SELECT one_name, two_name, count, out_price
+        FROM stock_out_in_company
+        WHERE two_id = #{number}
+        AND store_id = #{storeId}
+        AND reason = '门店未确认'
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <select id="queryEndTime" resultType="Date">
+        SELECT end_time
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertStockOneStore">
+        INSERT INTO one_projects_store(
+        project_name, store_id, create_time, update_time
+        )
+        VALUES (
+        #{name}, #{storeId}, now(), now()
+        )
+    </insert>
+
+    <select id="queryStockId" resultType="Integer">
+        SELECT id
+        FROM one_projects_store
+        WHERE project_name = #{name}
+        AND store_id = #{storeId}
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <insert id="insertStockTwoStore">
+        INSERT INTO two_projects_store(
+        one_project_id, project_name, store_id, price, count, end_time, create_time, update_time, number
+        )
+        VALUES (
+        #{oneId}, #{twoName}, #{storeId}, #{fee}, #{number}, #{endTime}, now(), now(), #{idNumber}
+        )
+    </insert>
+
+    <update id="updateOutInCompany">
+        UPDATE stock_out_in_company
+        SET reason = '门店已确认', update_time = now()
+        WHERE two_id = #{id}
+        AND store_id = #{storeId}
+    </update>
+
+    <select id="queryConsumption" resultType="int">
+        SELECT COUNT(*) FROM consumption_detail
+        WHERE user_id = #{userId}
+        AND TO_DAYS( NOW( ) ) - TO_DAYS( create_time) <![CDATA[ <= ]]> #{day}
+    </select>
+
+    <insert id="insertConsumptionOrder">
+        INSERT INTO consumption_order(
+        user_id, store_id, card_id, project_name, status, type, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{storeId}, #{cardId}, #{projectName}, #{status}, #{type}, now(), now()
+        )
+    </insert>
+
+    <select id="getConsumptionOrderId" resultType="Integer">
+        SELECT id
+        FROM consumption_order
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND card_id = #{cardId}
+        AND project_name = #{projectName}
+        AND status = #{status}
+        AND type = #{type}
+        ORDER BY update_time DESC
+        limit 1
+    </select>
+
+    <update id="updateConsumptionOrder">
+        UPDATE consumption_order
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertScoreWait">
+        INSERT INTO score_wait(
+        user_id, store_id, project_name, status, score, create_time, update_time
+        )
+        VALUES (
+        #{userId}, #{storeId}, #{name}, #{status}, #{score}, now(), now()
+        )
+    </insert>
+
+    <select id="getScoreWaitId" resultType="Integer">
+        SELECT id
+        FROM score_wait
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND project_name = #{name}
+        AND status = #{status}
+        AND score = #{score}
+        ORDER BY update_time DESC
+        limit 1
+    </select>
+
+    <update id="updateScoreWait">
+        UPDATE score_wait
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryCompanyStockCount" resultType="Integer">
+        SELECT count
+        FROM two_stock_company
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateCompanyStockCount">
+        UPDATE two_stock_company
+        SET count = count - #{number}, update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryStoreStock" resultType="Integer">
+        SELECT COUNT(*) FROM two_projects_store
+        WHERE number = #{number}
+        AND store_id = #{storeId}
+    </select>
+
+    <update id="updateStock">
+        UPDATE two_projects_store
+        SET count = count + #{count}, update_time = now()
+        WHERE number = #{number}
+    </update>
+
+    <insert id="insertOutInStore">
+        INSERT INTO stock_out_in_store(
+        one_id, one_name, two_id, two_name, operation, store_id, price, count, create_time, update_time, reason
+        )
+        VALUES (
+        #{oneId}, #{oneName}, #{twoId}, #{twoName}, #{operation}, #{storeId}, #{price}, #{number}, now(), now(), #{reason}
+        )
+    </insert>
+
+    <select id="getStoreStockId" resultType="Integer">
+        SELECT id
+        FROM two_projects_store
+        WHERE number = #{number}
+        AND store_id = #{storeId}
+    </select>
+
+    <select id="getStoreStockOneId" resultType="String">
+        SELECT one_project_id
+        FROM two_projects_store
+        WHERE id = #{twoId}
+    </select>
+
+    <select id="getStoreStockOneName" resultType="String">
+        SELECT project_name
+        FROM one_projects_store
+        WHERE id = #{id}
+    </select>
+
+    <select id="gerStoreStockNumber" resultType="Integer">
+        SELECT count
+        FROM two_projects_store
+        WHERE number = #{id}
+        AND store_id = #{storeId}
+    </select>
+    
+    <update id="updateStoreStock">
+        UPDATE two_projects_store
+        SET count = count - #{number}, update_time = now()
+        WHERE number = #{id}
+        AND store_id = #{storeId}
+    </update>
+
+    <select id="getTwoNameStockStore" resultType="String">
+        SELECT project_name
+        FROM two_projects_store
+        WHERE number = #{id}
+        AND store_id = #{storeId}
+    </select>
+
+    <select id="queryStoreStockOne" resultType="int">
+        SELECT count(*) FROM one_projects_store
+        WHERE store_id = #{storeId}
+        AND project_name = #{name}
+    </select>
+
+    <select id="queryCompanyOutIn" resultMap="OutInDetailPojo">
+        SELECT price, out_price, count, two_id, one_name, operation, reason, two_name, create_time, store_id
+        FROM stock_out_in_company
+        WHERE company_id = #{companyId}
+        AND (create_time BETWEEN #{beginTime} and #{endTime})
+    </select>
+
+    <select id="getStoreName" resultType="String">
+        SELECT user_name
+        FROM store
+        WHERE user_id = #{store_id}
+    </select>
+
+    <select id="getTwoIdCompany" resultType="Integer">
+        SELECT id
+        FROM two_stock_company
+        WHERE company_id = #{companyId}
+        AND one_id = #{id}
+        AND project_name = #{name}
+    </select>
+
+    <select id="getUserName" resultType="String">
+        SELECT user_name
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getUserPhone" resultType="String">
+        SELECT phone
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insertAchievement">
+        INSERT INTO achievement(
+        card_id, project_name, price, user_name, user_phone, reason, technicians_id, type, store_id, create_time, update_time
+        )
+        VALUES (
+        #{cardId}, #{projectName}, #{price}, #{userName}, #{userPhone}, #{reason}, #{technicianIds}, #{type}, #{storeId}, now(), now()
+        )
+    </insert>
+
+    <select id="queryCardIdTime" resultType="Integer">
+        SELECT id
+        FROM time_cards
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND order_id = #{orderId}
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <select id="queryCardId" resultType="Integer">
+        SELECT id
+        FROM process_cards
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND order_id = #{orderId}
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <select id="getTimeCardOrderId" resultType="String">
+        SELECT order_id
+        FROM time_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <update id="updateOrderPrice">
+        UPDATE orders
+        SET price = price - #{price}, update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getCardOrderId" resultType="String">
+        SELECT order_id
+        FROM process_cards
+        WHERE id = #{cardId}
+    </select>
+
+    <select id="getPriceWithOrder" resultType="Double">
+        SELECT price
+        FROM orders
+        WHERE id = #{orderId}
+    </select>
+
+    <update id="updateProjectOne">
+        UPDATE one_projects
+        SET project_name = #{name}
+        WHERE project_id = #{id}
+    </update>
+
+    <update id="updateStockStoreOne">
+        UPDATE one_projects_store
+        SET project_name = #{name}, update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCompanyStockOne">
+        UPDATE one_stock_company
+        SET project_name = #{name}, update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateConsumptionDetailPrice">
+        UPDATE consumption_detail
+        SET price = #{fee}, update_time = now()
+        WHERE order_id = #{id}
+        AND reason = '生单'
+    </update>
+
+    <update id="updateAchievementPrice">
+        UPDATE achievement
+        SET price = #{fee}, update_time = now()
+        WHERE card_id = #{cardId}
+        AND reason = #{reason}
+    </update>
+</mapper>

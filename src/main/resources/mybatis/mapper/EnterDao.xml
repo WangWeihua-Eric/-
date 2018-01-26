@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eric.dao.EnterDao">
+    <resultMap id="EnterResult" type="com.eric.pojo.EnterPojo">
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="user_password" property="userPassword" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="signUp" parameterType="com.eric.pojo.EnterPojo">
+        INSERT INTO user(
+        <trim suffixOverrides=",">
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userPassword != null">
+                user_password,
+            </if>
+            create_time,
+            update_time
+        </trim>
+        )
+        VALUES (
+        <trim suffixOverrides=",">
+            <if test="userName != null">
+                #{userName},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createTime == null">
+                NOW(),
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateTime == null">
+                NOW(),
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <select id="queryWithUserName" resultType="int">
+        SELECT COUNT(*)
+        FROM store
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryWithUserNameOfCompany" resultType="int">
+        SELECT COUNT(*)
+        FROM company
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getPasswrodWithUserId" resultType="String">
+        SELECT user_password
+        FROM store
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getPasswrodOfCompanyWithUserId" resultType="String">
+        SELECT user_password
+        FROM company
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getName" resultType="String">
+        SELECT user_name
+        FROM store
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getNameOfCompany" resultType="String">
+        SELECT user_name
+        FROM company
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getLevelOfCompany" resultType="Integer">
+        SELECT user_level
+        FROM company
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

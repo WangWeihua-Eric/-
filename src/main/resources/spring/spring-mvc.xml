@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.eric.controller" />
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <beans:constructor-arg index="0" value="UTF-8" />
+                <property name="writeAcceptCharset" value="false" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean
+            class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <util:list>
+                <beans:ref bean="stringHttpMessageConverter" />
+            </util:list>
+        </property>
+    </bean>
+
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter">
+        <beans:constructor-arg index="0" value="UTF-8" />
+    </bean>
+
+    <bean id="controllerInterceptor" class="com.qunar.mobile.car.qb.drivcommon.advice.ParamsLogAop" />
+    <!--<bean id="controllerReceiveInterceptor"-->
+          <!--class="com.qunar.car.owl.aop.interceptor.ControllerReceiveInterceptor" />-->
+
+    <bean
+            class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="proxyTargetClass">
+            <value>false</value>
+        </property>
+        <property name="beanNames">
+            <list>
+                <value>*Controller</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>controllerInterceptor</value>
+                <!--<value>controllerReceiveInterceptor</value>-->
+            </list>
+        </property>
+    </bean>
+
+</beans>
