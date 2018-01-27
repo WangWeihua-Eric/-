@@ -782,4 +782,10 @@ public interface AdministrationDao {
     void updateAchievementPrice(@Param("cardId") String cardId,
                                 @Param("fee") Double fee,
                                 @Param("reason") String reason);
+
+    /**
+     * 修改门店密码
+     */
+    void updateStoreInfo(@Param("storeId") String storeId,
+                         @Param("password") String password);
 }

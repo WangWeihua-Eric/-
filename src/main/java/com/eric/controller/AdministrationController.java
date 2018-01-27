@@ -1539,4 +1539,25 @@ public class AdministrationController {
         }
         return cardPojoList;
     }
+
+    /**
+     * 修改门店密码
+     * @param companyId
+     * @param storeId
+     * @param password
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/store/update/info")
+    @ResponseBody
+    public Object updateStoreInfo(@RequestParam(value = "companyId", required = false) String companyId,
+                                           @RequestParam(value = "storeId", required = false) String storeId,
+                                           @RequestParam(value = "password", required = false) String password,
+                                           HttpServletRequest request){
+        if(Strings.isNullOrEmpty(companyId) || Strings.isNullOrEmpty(storeId) || Strings.isNullOrEmpty(password)){
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+        }
+        administrationDao.updateStoreInfo(storeId, password);
+        return "ok";
+    }
 }

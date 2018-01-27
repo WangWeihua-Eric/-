@@ -1049,4 +1049,10 @@
         WHERE card_id = #{cardId}
         AND reason = #{reason}
     </update>
+
+    <update id="updateStoreInfo">
+        UPDATE store
+        SET user_password = #{password}, update_time = now()
+        WHERE user_id = #{storeId}
+    </update>
 </mapper>
