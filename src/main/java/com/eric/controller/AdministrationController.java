@@ -27,6 +27,8 @@ public class AdministrationController {
     @Autowired
     private AdministrationDao administrationDao;
 
+    private String companyIdTemp = "ymhui888";
+
     /**
      * 客户列表页接口
      * @param storeId
@@ -1205,7 +1207,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         List<StoreInfoPojo> storeInfoPojoList = administrationDao.queryStoreInfoPojoList(companyId);
         return storeInfoPojoList;
     }
@@ -1308,7 +1310,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         StockPojo stockPojo = new StockPojo();
         List<StockOnePojo> stockOnePojoList = administrationDao.queryStockOnePojoListOfCompany(companyId);
         stockPojo.setStockOnePojoList(stockOnePojoList);
@@ -1334,7 +1336,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId) || Strings.isNullOrEmpty(id)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         List<StockTwoPojo> stockTwoPojoList = administrationDao.queryStockTwoPojoListOfCompany(companyId, id);
         return stockTwoPojoList;
     }
@@ -1352,7 +1354,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         List<StockTwoPojo> stockTwoPojoList = administrationDao.querycompanyStockRemain(companyId);
         if(stockTwoPojoList != null){
             for(StockTwoPojo stockTwoPojo: stockTwoPojoList){
@@ -1379,7 +1381,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId) || Strings.isNullOrEmpty(name)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         administrationDao.insertStockOne(companyId, name);
         return "ok";
     }
@@ -1400,7 +1402,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(storeId) || Strings.isNullOrEmpty(id) || Strings.isNullOrEmpty(companyId) || number == null || number < 1){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         String oneId = administrationDao.queryOneId(id);
         String oneName = administrationDao.queryOneName(oneId);
         String twoName = administrationDao.queryTwoName(id);
@@ -1436,7 +1438,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId) || Strings.isNullOrEmpty(id) || Strings.isNullOrEmpty(name) || number == null || number < 1 || inPrice == null || inPrice < 0 || outPrice == null || outPrice < 0 || endTime == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         administrationDao.insertCompanyStockTwo(companyId, id, name, inPrice, outPrice, number, endTime);
         Integer twoId = administrationDao.getTwoIdCompany(companyId, id, name);
         String oneName = administrationDao.queryOneName(id);
@@ -1461,7 +1463,7 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(companyId) || beginTime == null || endTime == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        companyId = "1111";
+        companyId = this.companyIdTemp;
         List<OutInDetailPojo> outInDetailPojoList = administrationDao.queryCompanyOutIn(companyId, beginTime, endTime);
         if(outInDetailPojoList != null){
             for(OutInDetailPojo outInDetailPojo: outInDetailPojoList){
