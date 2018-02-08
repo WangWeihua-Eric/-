@@ -264,7 +264,7 @@ public class AdministrationController {
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         if(price == null){
-            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+            price = 0.0;
         }
         if(type == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
@@ -273,8 +273,6 @@ public class AdministrationController {
                 if(Strings.isNullOrEmpty(technicianId)){
                     throw new BaseException(CommonBaseStatus.PARAM_ERROR);
                 }
-            }else if(Strings.isNullOrEmpty(giveCardId)){
-                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
             }
         }
         String typeTemp = "";
@@ -1434,7 +1432,6 @@ public class AdministrationController {
                                         @RequestParam(value = "number", required = false) Integer number,
                                   @RequestParam(value = "endTime", required = false) Date endTime,
                                         HttpServletRequest request){
-        endTime = new Date();
         if(Strings.isNullOrEmpty(companyId) || Strings.isNullOrEmpty(id) || Strings.isNullOrEmpty(name) || number == null || number < 1 || inPrice == null || inPrice < 0 || outPrice == null || outPrice < 0 || endTime == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
