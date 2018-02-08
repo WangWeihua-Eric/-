@@ -265,6 +265,7 @@ public class AdministrationController {
         }
         if(price == null){
             price = 0.0;
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         if(type == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
