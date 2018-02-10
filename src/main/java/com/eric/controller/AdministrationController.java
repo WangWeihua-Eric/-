@@ -263,7 +263,7 @@ public class AdministrationController {
         if(courseOfTreatment == null && day == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        if(price == null){
+        if(price == null || price < 0){
             price = 0.0;
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }

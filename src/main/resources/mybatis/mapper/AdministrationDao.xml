@@ -951,6 +951,8 @@
         WHERE company_id = #{companyId}
         AND one_id = #{id}
         AND project_name = #{name}
+        ORDER BY create_time DESC
+        limit 1
     </select>
 
     <select id="getUserName" resultType="String">
