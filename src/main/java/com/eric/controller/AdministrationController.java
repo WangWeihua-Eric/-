@@ -281,7 +281,7 @@ public class AdministrationController {
         }
         if(!Strings.isNullOrEmpty(giveProject)){
             if(giveCourseOfTreatment == null || giveCourseOfTreatment < 1){
-                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+                giveCourseOfTreatment = 1;
             }
         }
         String typeTemp = "";
