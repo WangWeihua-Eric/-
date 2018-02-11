@@ -244,6 +244,7 @@ public class AdministrationController {
                             @RequestParam(value = "storeId", required = false) String storeId,
                             @RequestParam(value = "renewProject", required = false) String renewProject,
                             @RequestParam(value = "giveProject", required = false) String giveProject,
+                            @RequestParam(value = "giveCourseOfTreatment", required = false) Integer giveCourseOfTreatment,
                             @RequestParam(value = "courseOfTreatment", required = false) Integer courseOfTreatment,
                             @RequestParam(value = "day", required = false) Integer day,
                             @RequestParam(value = "price", required = false) Double price,
@@ -263,8 +264,10 @@ public class AdministrationController {
         if(courseOfTreatment == null && day == null){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
-        if(price == null || price < 0){
+        if(price == null){
             price = 0.0;
+        }
+        if(price < 0){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         if(type == null){
@@ -274,6 +277,11 @@ public class AdministrationController {
                 if(Strings.isNullOrEmpty(technicianId)){
                     throw new BaseException(CommonBaseStatus.PARAM_ERROR);
                 }
+            }
+        }
+        if(!Strings.isNullOrEmpty(giveProject)){
+            if(giveCourseOfTreatment == null || giveCourseOfTreatment < 1){
+                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
             }
         }
         String typeTemp = "";
@@ -290,6 +298,9 @@ public class AdministrationController {
         if(point == null){
             point = 0.0;
         }
+        if(Strings.isNullOrEmpty(reason)){
+            reason = "";
+        }
         administrationDao.insertOrder(userId, storeId, renewProject, giveProject, courseOfTreatment, day, price, storePoint, type, technicianId, reason, point, giveCardId);
         String orderId = administrationDao.queryOrderId(userId, storeId);
         String projectName = administrationDao.getProjectName(renewProject);
@@ -298,13 +309,13 @@ public class AdministrationController {
         if(day != null){
             administrationDao.insertTimeCard(userId, storeId, orderId, renewProject, day);
             Integer cardId = administrationDao.queryCardIdTime(userId, storeId, orderId);
-            administrationDao.insertConsumptionDetail(userId, projectName, price, day, 0, "", 0.0, "生单", orderId);
-            administrationDao.insertAchievement("时间卡：" + cardId, projectName, price, userName, userPhone, "开单", technicianId, typeTemp, storeId);
+            administrationDao.insertConsumptionDetail(userId, projectName, price, day, 0, "", 0.0, "生单", orderId, reason);
+            administrationDao.insertAchievement("时间卡：" + cardId, projectName, price, userName, userPhone, "开单", technicianId, typeTemp, storeId, reason);
         }else if(courseOfTreatment != null){
             administrationDao.insertCourseCard(userId, storeId, orderId, renewProject, courseOfTreatment);
             Integer cardId = administrationDao.queryCardId(userId, storeId, orderId);
-            administrationDao.insertConsumptionDetail(userId, projectName, price, courseOfTreatment, 0, "", 0.0, "生单", orderId);
-            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, price, userName, userPhone, "开单", technicianId, typeTemp, storeId);
+            administrationDao.insertConsumptionDetail(userId, projectName, price, courseOfTreatment, 0, "", 0.0, "生单", orderId, reason);
+            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, price, userName, userPhone, "开单", technicianId, typeTemp, storeId, reason);
         }
         if(storePoint != null && storePoint != 0){
             administrationDao.insertScoreFlow(userId, projectName, storePoint, 1);
@@ -314,10 +325,10 @@ public class AdministrationController {
         }
         if(giveProject != null){
             String giveProjectName = administrationDao.getProjectName(giveProject);
-            administrationDao.insertCourseCard(userId, storeId, orderId, giveProject, 1);
+            administrationDao.insertCourseCard(userId, storeId, orderId, giveProject, giveCourseOfTreatment);
             Integer cardId = administrationDao.queryCardId(userId, storeId, orderId);
-            administrationDao.insertConsumptionDetail(userId, giveProjectName, 0.0, 1, 0, "", 0.0, "生单赠送", "");
-            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "开单", technicianId, typeTemp, storeId);
+            administrationDao.insertConsumptionDetail(userId, giveProjectName, 0.0, giveCourseOfTreatment, 0, "", 0.0, "生单赠送", "", reason);
+            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "开单", technicianId, typeTemp, storeId, reason);
         }
         return "ok";
     }
@@ -407,6 +418,24 @@ public class AdministrationController {
             }
         }
         List<ConsumptionDetailPojo> consumptionDetailList = administrationDao.getConsumptionDetailList(userId);
+        if(consumptionDetailList != null){
+            for(ConsumptionDetailPojo consumptionDetailPojo: consumptionDetailList){
+                if(consumptionDetailPojo.getReason().equals("生单") || consumptionDetailPojo.getReason().equals("生单赠送")){
+                    if(Strings.isNullOrEmpty(consumptionDetailPojo.getRemarks())){
+                        if(Strings.isNullOrEmpty(consumptionDetailPojo.getOrderId())){
+                            continue;
+                        }else {
+                            String remarkTemp = administrationDao.getReasonOfOrders(Integer.valueOf(consumptionDetailPojo.getOrderId()));
+                            if(Strings.isNullOrEmpty(remarkTemp)){
+                                continue;
+                            }else {
+                                consumptionDetailPojo.setRemarks(remarkTemp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         List<ScoreDetailPojo> scoreDetailList = administrationDao.getScoreDetailList(userId, 1);
         Double sum = 0.0;
         if(scoreDetailList != null){
@@ -510,6 +539,7 @@ public class AdministrationController {
                                     @RequestParam(value = "type", required = false) Integer type,
                                         @RequestParam(value = "status", required = false) Integer status,
                                      @RequestParam(value = "technicianId", required = false) String technicianId,
+                                    @RequestParam(value = "remarks", required = false) String remarks,
                                      HttpServletRequest request){
         if(Strings.isNullOrEmpty(userId) || Strings.isNullOrEmpty(storeId) || Strings.isNullOrEmpty(technicianId) || Strings.isNullOrEmpty(cardId)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
@@ -531,6 +561,9 @@ public class AdministrationController {
             }
         }else {
             //确认核销
+            if(Strings.isNullOrEmpty(remarks)){
+                remarks = "";
+            }
             String userName = administrationDao.getUserName(userId);
             String userPhone = administrationDao.getUserPhone(userId);
             String[] technicianIdArray = technicianId.split(",");
@@ -544,9 +577,9 @@ public class AdministrationController {
                 int size = technicianIdArray.length;
                 Double temp = fee / size;
                 for (int i = 0; i < technicianIdArray.length; i++) {
-                    administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, process, technicianIdArray[i], temp, "核销", "");
+                    administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, process, technicianIdArray[i], temp, "核销", "", remarks);
                 }
-                administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId);
+                administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId, remarks);
                 Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
                 if(id != null){
                     administrationDao.updateConsumptionOrder(id, 1);
@@ -561,9 +594,9 @@ public class AdministrationController {
                 int size = technicianIdArray.length;
                 Double temp = fee / size;
                 for (int i = 0; i < technicianIdArray.length; i++) {
-                    administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, (int)diff, technicianIdArray[i], temp, "核销", "");
+                    administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, (int)diff, technicianIdArray[i], temp, "核销", "", remarks);
                 }
-                administrationDao.insertAchievement("时间卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId);
+                administrationDao.insertAchievement("时间卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId, remarks);
                 Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
                 if(id != null){
                     administrationDao.updateConsumptionOrder(id, 1);
@@ -601,13 +634,13 @@ public class AdministrationController {
             //确认
             administrationDao.insertCourseCard(userId, storeId, "", projectId, 1);
             Integer cardId = administrationDao.queryCardId(userId, storeId, "");
-            administrationDao.insertConsumptionDetail(userId, giveProjectName, 0.0, 1, 0, "", 0.0, "积分兑换", "");
+            administrationDao.insertConsumptionDetail(userId, giveProjectName, 0.0, 1, 0, "", 0.0, "积分兑换", "", "");
             if(point != null && point >= 0){
                 administrationDao.insertScoreFlow(userId, giveProjectName, -point, 1);
             }
             String userName = administrationDao.getUserName(userId);
             String userPhone = administrationDao.getUserPhone(userId);
-            administrationDao.insertAchievement("疗程卡：" + cardId, giveProjectName, 0.0, userName, userPhone, "积分兑换", "", "体验", storeId);
+            administrationDao.insertAchievement("疗程卡：" + cardId, giveProjectName, 0.0, userName, userPhone, "积分兑换", "", "体验", storeId, "");
             Integer id = administrationDao.getScoreWaitId(userId, storeId, giveProjectName, 0, -point);
             if(id != null){
                 administrationDao.updateScoreWait(id, 1);
@@ -697,8 +730,8 @@ public class AdministrationController {
             }
             String projectId = administrationDao.getTimeCardProjectId(cardId);
             String projectName = administrationDao.getProjectName(projectId);
-            administrationDao.insertAchievement("时间卡：" + cardId, projectName, fee, userName, userPhone, "退卡", "", "", storeId);
-            administrationDao.insertConsumptionDetail(userId, projectName, fee, 0, 0, "", 0.0, "退卡", id);
+            administrationDao.insertAchievement("时间卡：" + cardId, projectName, fee, userName, userPhone, "退卡", "", "", storeId, "");
+            administrationDao.insertConsumptionDetail(userId, projectName, fee, 0, 0, "", 0.0, "退卡", id, "");
         }else {
             //疗程卡
             Integer status = administrationDao.getCardStatus(Integer.valueOf(cardId));
@@ -716,8 +749,8 @@ public class AdministrationController {
             }
             String projectId = administrationDao.getProcessCardProjectId(cardId);
             String projectName = administrationDao.getProjectName(projectId);
-            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, fee, userName, userPhone, "退卡", "", "", storeId);
-            administrationDao.insertConsumptionDetail(userId, projectName, fee, 0, 0, "", 0.0, "退卡", id);
+            administrationDao.insertAchievement("疗程卡：" + cardId, projectName, fee, userName, userPhone, "退卡", "", "", storeId, "");
+            administrationDao.insertConsumptionDetail(userId, projectName, fee, 0, 0, "", 0.0, "退卡", id, "");
         }
         return "ok";
     }
@@ -928,6 +961,25 @@ public class AdministrationController {
         }
         Integer id = administrationDao.getTechniciansId();
         administrationDao.insertTechnicianInfo(storeId, name, phone, level, String.valueOf(id + 1), grad, inTime);
+        return "ok";
+    }
+
+    /**
+     * 删除技师
+     * @param technicianId
+     * @param storeId
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/technicians/delate")
+    @ResponseBody
+    public Object technicianDelate(@RequestParam(value = "technicianId", required = false) String technicianId,
+                                @RequestParam(value = "storeId", required = false) String storeId,
+                                HttpServletRequest request){
+        if(Strings.isNullOrEmpty(storeId) || Strings.isNullOrEmpty(technicianId)){
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+        }
+        administrationDao.updateTechnicianDelate(Integer.valueOf(technicianId), 1);
         return "ok";
     }
 

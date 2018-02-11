@@ -161,7 +161,8 @@ public interface AdministrationDao {
                                  @Param("technicianId") String technicianId,
                                  @Param("fee") Double fee,
                                  @Param("reason") String reason,
-                                 @Param("orderId") String orderId);
+                                 @Param("orderId") String orderId,
+                                 @Param("remarks") String remarks);
 
     /**
      * 获取积分流水
@@ -237,6 +238,12 @@ public interface AdministrationDao {
                               @Param("id") String id,
                               @Param("grad") String grad,
                               @Param("inTime") Date inTime);
+
+    /**
+     * 删除技师
+     */
+    void updateTechnicianDelate(@Param("id") Integer id,
+                                @Param("status") Integer status);
 
     /**
      * 获取最后一个技师id
@@ -700,7 +707,8 @@ public interface AdministrationDao {
                            @Param("reason") String reason,
                            @Param("technicianIds") String technicianId,
                            @Param("type") String type,
-                           @Param("storeId") String storeId);
+                           @Param("storeId") String storeId,
+                           @Param("remarks") String remarks);
 
     /**
      * 获取时间卡id
@@ -788,4 +796,9 @@ public interface AdministrationDao {
      */
     void updateStoreInfo(@Param("storeId") String storeId,
                          @Param("password") String password);
+
+    /**
+     * 获取生单备注
+     */
+    String getReasonOfOrders(Integer id);
 }

@@ -17,6 +17,15 @@ public class AchievementPojo {
     private String type;
     private String storeId;
     private Date time;
+    private String remarks;
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
     public String getCardId() {
         return cardId;

@@ -10,6 +10,24 @@ public class ConsumptionDetailPojo {
     private Integer limit;
     private String projectId;
     private String reason;
+    private String remarks;
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
     public String getReason() {
         return reason;
