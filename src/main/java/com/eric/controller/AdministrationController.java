@@ -277,6 +277,10 @@ public class AdministrationController {
                 if(Strings.isNullOrEmpty(technicianId)){
                     throw new BaseException(CommonBaseStatus.PARAM_ERROR);
                 }
+            }else {
+                if(Strings.isNullOrEmpty(technicianId)){
+                    technicianId = "";
+                }
             }
         }
         if(!Strings.isNullOrEmpty(giveProject)){
