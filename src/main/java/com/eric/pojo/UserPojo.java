@@ -14,6 +14,15 @@ public class UserPojo {
     private Double balance;
     private Integer consumptionFalg; //0：有到店，1：7日无到店核销记录
     private Integer birthdayFlag; //0：生日还早，1：7日生日
+    private Integer birthdayDiff;
+
+    public Integer getBirthdayDiff() {
+        return birthdayDiff;
+    }
+
+    public void setBirthdayDiff(Integer birthdayDiff) {
+        this.birthdayDiff = birthdayDiff;
+    }
 
     public Integer getConsumptionFalg() {
         return consumptionFalg;

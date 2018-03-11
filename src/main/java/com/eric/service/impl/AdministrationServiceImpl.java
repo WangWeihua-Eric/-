@@ -3,16 +3,16 @@ package com.eric.service.impl;
 import com.eric.dao.AdministrationDao;
 import com.eric.pojo.*;
 import com.eric.service.IAdministrationService;
+import com.eric.utils.DateUtil;
 import com.qunar.mobile.car.qb.drivcommon.enums.CommonBaseStatus;
 import com.qunar.mobile.car.qb.drivcommon.exception.BaseException;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdministrationServiceImpl implements IAdministrationService {
@@ -27,6 +27,33 @@ public class AdministrationServiceImpl implements IAdministrationService {
         try {
             page = page * 10;
             userPojoList = administrationDao.getUserListWithPage(userId, page);
+            if(userPojoList != null){
+                for (UserPojo userPojoTemp: userPojoList){
+                    if(userPojoTemp != null && userPojoTemp.getBirthday() != null){
+                        userPojoTemp.setBirthdayDiff(brithdayDiff(userPojoTemp.getBirthday()));
+                    }
+                }
+
+                /**
+                 * 根据diff排序
+                 */
+                Collections.sort(userPojoList , new Comparator<UserPojo>(){
+                    @Override
+                    public int compare(UserPojo o1, UserPojo o2){
+                        return o1.getBirthdayDiff().compareTo(o2.getBirthdayDiff());
+                    }
+                });
+                Integer toIndex = page;
+                Integer size = userPojoList.size();
+                if(toIndex > size){
+                    toIndex = size;
+                }
+                userPojoList = userPojoList.subList(0,toIndex);
+//                List<UserPojo> listTemp = new ArrayList<UserPojo>();
+//                listTemp.addAll();
+//                userPojoList.clear();
+//                userPojoList.addAll(listTemp);
+            }
             page = page / 10;
             int size = administrationDao.queryUserCount(userId);
             if((page - 1) * 10 < size){
@@ -44,8 +71,7 @@ public class AdministrationServiceImpl implements IAdministrationService {
                         Date birthday = userPojoTemp.getBirthday();
                         if(birthday != null){
                             userPojoTemp.setAge(getAge(birthday));
-                            long diff = dayDiff(birthday, now);
-                            if(diff < 8){
+                            if(userPojoTemp.getBirthdayDiff() < 8){
                                 userPojoTemp.setBirthdayFlag(1);
                             }else {
                                 userPojoTemp.setBirthdayFlag(0);
@@ -71,6 +97,32 @@ public class AdministrationServiceImpl implements IAdministrationService {
 
     public static long dayDiff(Date date1, Date date2) {
         return (date2.getTime() - date1.getTime()) / 86400000;
+    }
+
+    public static int brithdayDiff(Date brithday) throws ParseException {
+        SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        String clidate = DateUtil.formatDate(brithday, DateUtil.format_5);//"1978-03-30";
+        Calendar cToday = Calendar.getInstance(); // 存今天
+        Calendar cBirth = Calendar.getInstance(); // 存生日
+        cBirth.setTime(myFormatter.parse(clidate)); // 设置生日
+        cBirth.set(Calendar.YEAR, cToday.get(Calendar.YEAR)); // 修改为本年
+        int days;
+        if (cBirth.get(Calendar.DAY_OF_YEAR) < cToday.get(Calendar.DAY_OF_YEAR)) {
+            // 生日已经过了，要算明年的了
+            days = cToday.getActualMaximum(Calendar.DAY_OF_YEAR) - cToday.get(Calendar.DAY_OF_YEAR);
+            days += cBirth.get(Calendar.DAY_OF_YEAR);
+        } else {
+            // 生日还没过
+            days = cBirth.get(Calendar.DAY_OF_YEAR) - cToday.get(Calendar.DAY_OF_YEAR);
+        }
+        // 输出结果
+        if (days == 0) {
+            return 0;
+            //System.out.println("今天生日");
+        } else {
+            return days;
+            //System.out.println("距离生日还有：" + days + "天");
+        }
     }
 
     //由出生日期获得年龄

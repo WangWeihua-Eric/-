@@ -153,7 +153,6 @@
         FROM users
         WHERE store_id = #{userId}
         ORDER BY birthday_time DESC
-        limit #{page}
     </select>
 
     <select id="queryUserCount" resultType="int">
