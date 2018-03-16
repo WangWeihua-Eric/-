@@ -812,4 +812,20 @@ public interface AdministrationDao {
      */
     List<UserPojo> queryUserPojoList(@Param("phoneNumber") String phoneNumber,
                                      @Param("userName") String userName);
+
+    /**
+     *查询待确认核销信息
+     */
+    List<ConsumptionOrderPojo> queryconsumptionOrderPojoList(@Param("userId") String userId,
+                                                             @Param("storeId") String storeId);
+
+    /**
+     * 通过时间卡id查询时间卡详情
+     */
+    CardPojo getTimeCardInfo(Integer id);
+
+    /**
+     * 通过疗程卡id查询疗程卡详情
+     */
+    CardPojo getCurseCardInfo(Integer id);
 }

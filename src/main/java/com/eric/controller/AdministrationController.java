@@ -489,6 +489,10 @@ public class AdministrationController {
         return (date2.getTime() - date1.getTime()) / 86400000;
     }
 
+    public static long dayDiffSecond(Date date1, Date date2) {
+        return (date2.getTime() - date1.getTime()) / 1000;
+    }
+
     /**
      * 更新客户信息接口
      * @param storeId
@@ -617,12 +621,99 @@ public class AdministrationController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/platform/settlement")
+    @RequestMapping(value = "/platform/get/settlement/info")
     @ResponseBody
     public Object platformSettlement(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                 @RequestParam(value = "userName", required = false) String userName,
                                 HttpServletRequest request){
         List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
+        if(userPojoList == null){
+            CommonBaseStatus.RESULT_ERROR.setDes("用户不存在");
+            throw new BaseException(CommonBaseStatus.RESULT_ERROR);
+        }
+        List<ConsumptionOrderPojo> consumptionOrderPojoList = new ArrayList<ConsumptionOrderPojo>();
+        for(UserPojo userPojo: userPojoList){
+            if(userPojo != null && !Strings.isNullOrEmpty(userPojo.getUserId()) && !Strings.isNullOrEmpty(userPojo.getStoreId())){
+                List<ConsumptionOrderPojo> consumptionOrderPojoTemp = administrationDao.queryconsumptionOrderPojoList(userPojo.getUserId(), userPojo.getStoreId());
+                if(consumptionOrderPojoTemp != null){
+                    consumptionOrderPojoList.addAll(consumptionOrderPojoTemp);
+                }
+            }
+        }
+        List<ConsumptionOrderPojo> consumptionOrderPojos = new ArrayList<ConsumptionOrderPojo>();
+        if(consumptionOrderPojoList.size() > 0){
+            Date nowDate = new Date();
+            for(ConsumptionOrderPojo consumptionOrderPojo: consumptionOrderPojoList){
+                if(consumptionOrderPojo != null && !Strings.isNullOrEmpty(consumptionOrderPojo.getCardId()) && consumptionOrderPojo.getType() != null){
+                    if(consumptionOrderPojo.getType().equals(1)){
+                        //时间卡
+                        CardPojo cardPojo = administrationDao.getTimeCardInfo(Integer.valueOf(consumptionOrderPojo.getCardId()));
+                        if(cardPojo != null){
+                            Integer limit = cardPojo.getLimit();
+                            String projectId = cardPojo.getProjectId();
+                            String projectName = administrationDao.getProjectName(projectId);
+                            cardPojo.setCardName(projectName + limit + "天卡");
+                            cardPojo.setProjectName(projectName);
+                            cardPojo.setTechnicianFee(administrationDao.getProjectFee(projectId));
+                            String cardId = cardPojo.getCardId();
+                            Date timeCardCreateTime = administrationDao.getTimeCardCreateTime(cardId);
+                            cardPojo.setCreateTime(timeCardCreateTime);
+                            long diff = dayDiff(timeCardCreateTime, nowDate);
+                            cardPojo.setProgress((int)diff);
+                            consumptionOrderPojo.setCardPojo(cardPojo);
+                            if(consumptionOrderPojo.getUpdateTime() != null){
+                                Long second = dayDiffSecond(consumptionOrderPojo.getUpdateTime(), nowDate);
+                                consumptionOrderPojo.setSecond(120);
+                                if(second < 120){
+                                    consumptionOrderPojos.add(consumptionOrderPojo);
+                                }
+                            }
+                        }
+                    }else {
+                        //疗程卡
+                        CardPojo cardPojo = administrationDao.getCurseCardInfo(Integer.valueOf(consumptionOrderPojo.getCardId()));
+                        if(cardPojo != null){
+                            Integer limit = cardPojo.getLimit();
+                            String projectId = cardPojo.getProjectId();
+                            String projectName = administrationDao.getProjectName(projectId);
+                            cardPojo.setCardName(projectName + limit + "次卡");
+                            cardPojo.setProjectName(projectName);
+                            cardPojo.setTechnicianFee(administrationDao.getProjectFee(projectId));
+                            cardPojo.setCreateTime(cardPojo.getBeginTime());
+                            cardPojo.setProgress(cardPojo.getProgress() + 1);
+                            consumptionOrderPojo.setCardPojo(cardPojo);
+                            if(consumptionOrderPojo.getUpdateTime() != null){
+                                Long second = dayDiffSecond(consumptionOrderPojo.getUpdateTime(), nowDate);
+                                consumptionOrderPojo.setSecond(120);
+                                if(second < 120){
+                                    consumptionOrderPojos.add(consumptionOrderPojo);
+                                }
+                            }
+                            consumptionOrderPojos.add(consumptionOrderPojo);
+                        }
+                    }
+                }
+            }
+        }
+        return consumptionOrderPojos;
+    }
+
+    /**
+     * 平台核销确认
+     * @param id
+     * @param reason
+     * @param evaluation
+     * @param status
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/platform/settlement/with/id")
+    @ResponseBody
+    public Object platformSettlementWithId(@RequestParam(value = "id", required = false) Integer id,
+                                @RequestParam(value = "reason", required = false) String reason,
+                                @RequestParam(value = "evaluation", required = false) Integer evaluation,
+                                @RequestParam(value = "status", required = false) Integer status,
+                                HttpServletRequest request){
         return null;
     }
 
