@@ -801,4 +801,15 @@ public interface AdministrationDao {
      * 获取生单备注
      */
     String getReasonOfOrders(Integer id);
+
+
+    /**
+     * 以下是门店-平台功能
+     */
+
+    /**
+     * 获取用户信息
+     */
+    List<UserPojo> queryUserPojoList(@Param("phoneNumber") String phoneNumber,
+                                     @Param("userName") String userName);
 }

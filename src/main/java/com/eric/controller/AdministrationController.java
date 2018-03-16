@@ -610,6 +610,21 @@ public class AdministrationController {
         return "ok";
     }
 
+    /**
+     * 平台拉取核销确认信息
+     * @param phoneNumber
+     * @param userName
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/platform/settlement")
+    @ResponseBody
+    public Object platformSettlement(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                @RequestParam(value = "userName", required = false) String userName,
+                                HttpServletRequest request){
+        List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
+        return null;
+    }
 
     /**
      * 积分兑换项目确认兑换接口
