@@ -626,6 +626,9 @@ public class AdministrationController {
     public Object platformSettlement(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                 @RequestParam(value = "userName", required = false) String userName,
                                 HttpServletRequest request){
+        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+        }
         List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
         if(userPojoList == null){
             CommonBaseStatus.RESULT_ERROR.setDes("用户不存在");
@@ -664,9 +667,10 @@ public class AdministrationController {
                             if(consumptionOrderPojo.getUpdateTime() != null){
                                 Long second = dayDiffSecond(consumptionOrderPojo.getUpdateTime(), nowDate);
                                 consumptionOrderPojo.setSecond(120);
-                                if(second < 120){
-                                    consumptionOrderPojos.add(consumptionOrderPojo);
-                                }
+//                                if(second < 120){
+//                                    consumptionOrderPojos.add(consumptionOrderPojo);
+//                                }
+                                consumptionOrderPojos.add(consumptionOrderPojo);
                             }
                         }
                     }else {
@@ -685,9 +689,10 @@ public class AdministrationController {
                             if(consumptionOrderPojo.getUpdateTime() != null){
                                 Long second = dayDiffSecond(consumptionOrderPojo.getUpdateTime(), nowDate);
                                 consumptionOrderPojo.setSecond(120);
-                                if(second < 120){
-                                    consumptionOrderPojos.add(consumptionOrderPojo);
-                                }
+//                                if(second < 120){
+//
+//                                }
+                                consumptionOrderPojos.add(consumptionOrderPojo);
                             }
                             consumptionOrderPojos.add(consumptionOrderPojo);
                         }
@@ -758,6 +763,125 @@ public class AdministrationController {
         }
         return "ok";
     }
+
+    /**
+     * 平台拉去积分兑换信息
+     * @param phoneNumber
+     * @param userName
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/platform/query/score/exchange/info")
+    @ResponseBody
+    public Object platformQueryScoreExchangeInfo(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                                 @RequestParam(value = "userName", required = false) String userName,
+                                HttpServletRequest request){
+        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+        }
+        List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
+        if(userPojoList == null){
+            CommonBaseStatus.RESULT_ERROR.setDes("用户不存在");
+            throw new BaseException(CommonBaseStatus.RESULT_ERROR);
+        }
+        List<ScoreWaitPojo> scoreWaitPojos = new ArrayList<ScoreWaitPojo>();
+        for(UserPojo userPojo:userPojoList){
+            if(userPojo != null && !Strings.isNullOrEmpty(userPojo.getUserId()) && !Strings.isNullOrEmpty(userPojo.getStoreId())){
+                List<ScoreWaitPojo> scoreWaitPojoList = administrationDao.getScoreWaitPojoList(userPojo.getUserId(), userPojo.getStoreId());
+                if(scoreWaitPojoList != null){
+                    for(ScoreWaitPojo scoreWaitPojo: scoreWaitPojoList){
+                        if(scoreWaitPojo != null){
+                            scoreWaitPojos.add(scoreWaitPojo);
+                        }
+                    }
+                }
+            }
+        }
+        return scoreWaitPojos;
+    }
+
+    /**
+     * 平台确认积分兑换
+     * @param id
+     * @param status
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/platform/settlement/score/exchange/with/id")
+    @ResponseBody
+    public Object platformSettlementScoreExchangeWithId(@RequestParam(value = "id", required = false) Integer id,
+                                           @RequestParam(value = "status", required = false) Integer status,
+                                           HttpServletRequest request){
+
+        return null;
+    }
+
+    /**
+     * 平台拉取用户详情
+     * @param phoneNumber
+     * @param userName
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/platform/query/user/info")
+    @ResponseBody
+    public Object platformQueryUserInfo(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                        @RequestParam(value = "userName", required = false) String userName,
+                                                        HttpServletRequest request){
+        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+            throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+        }
+        List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
+        if(userPojoList == null){
+            CommonBaseStatus.RESULT_ERROR.setDes("用户不存在");
+            throw new BaseException(CommonBaseStatus.RESULT_ERROR);
+        }
+        List<UserInfoPojo> userInfoPojoList = new ArrayList<UserInfoPojo>();
+        for(UserPojo userPojo: userPojoList){
+            if(userPojo != null && !Strings.isNullOrEmpty(userPojo.getUserId()) && !Strings.isNullOrEmpty(userPojo.getStoreId())){
+                String userId = userPojo.getUserId();
+                String storeId = userPojo.getStoreId();
+                UserInfoPojo userInfoPojo = new UserInfoPojo();
+                UserPojo userInfo = administrationDao.queryUserInfoWithUserId(userId);
+                userInfo.setBabyBirthday(administrationDao.getBabyBirthday(userId));
+                userInfo.setAge(this.getAge(userInfo.getBirthday()));
+                List<ConsumptionDetailPojo> consumptionDetailList = administrationDao.getConsumptionDetailList(userId);
+                if(consumptionDetailList != null){
+                    for(ConsumptionDetailPojo consumptionDetailPojo: consumptionDetailList){
+                        if(consumptionDetailPojo.getReason().equals("生单") || consumptionDetailPojo.getReason().equals("生单赠送")){
+                            if(Strings.isNullOrEmpty(consumptionDetailPojo.getRemarks())){
+                                if(Strings.isNullOrEmpty(consumptionDetailPojo.getOrderId())){
+                                    continue;
+                                }else {
+                                    String remarkTemp = administrationDao.getReasonOfOrders(Integer.valueOf(consumptionDetailPojo.getOrderId()));
+                                    if(Strings.isNullOrEmpty(remarkTemp)){
+                                        continue;
+                                    }else {
+                                        consumptionDetailPojo.setRemarks(remarkTemp);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                List<ScoreDetailPojo> scoreDetailList = administrationDao.getScoreDetailList(userId, 2);
+                Double sum = 0.0;
+                if(scoreDetailList != null){
+                    for(ScoreDetailPojo scoreDetailPojo: scoreDetailList){
+                        sum = sum + scoreDetailPojo.getScoreChange();
+                    }
+                }
+                userInfo.setBalance(sum);
+                userInfoPojo.setUserInfo(userInfo);
+                userInfoPojo.setConsumptionDetailList(consumptionDetailList);
+                userInfoPojo.setScoreDetailList(scoreDetailList);
+                userInfoPojoList.add(userInfoPojo);
+            }
+        }
+
+        return userInfoPojoList;
+    }
+
 
     /**
      * 停复时间卡

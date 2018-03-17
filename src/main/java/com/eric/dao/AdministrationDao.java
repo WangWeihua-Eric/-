@@ -828,4 +828,10 @@ public interface AdministrationDao {
      * 通过疗程卡id查询疗程卡详情
      */
     CardPojo getCurseCardInfo(Integer id);
+
+    /**
+     * 获取积分兑换信息
+     */
+    List<ScoreWaitPojo> getScoreWaitPojoList(@Param("userId") String userId,
+                                             @Param("storeId") String storeId);
 }
