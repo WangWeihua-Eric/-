@@ -1099,8 +1099,7 @@
     <select id="queryUserPojoList" resultMap="UserPojo">
         SELECT user_id, phone, user_name, store_id
         FROM users
-        WHERE user_name = #{userName}
-        AND phone = #{phoneNumber}
+        WHERE phone = #{phoneNumber}
     </select>
 
     <select id="queryconsumptionOrderPojoList" resultMap="ConsumptionOrderPojo">

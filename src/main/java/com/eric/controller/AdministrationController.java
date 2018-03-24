@@ -626,7 +626,7 @@ public class AdministrationController {
     public Object platformSettlement(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                 @RequestParam(value = "userName", required = false) String userName,
                                 HttpServletRequest request){
-        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+        if(Strings.isNullOrEmpty(phoneNumber)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
@@ -776,7 +776,7 @@ public class AdministrationController {
     public Object platformQueryScoreExchangeInfo(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                                  @RequestParam(value = "userName", required = false) String userName,
                                 HttpServletRequest request){
-        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+        if(Strings.isNullOrEmpty(phoneNumber)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
@@ -828,7 +828,7 @@ public class AdministrationController {
     public Object platformQueryUserInfo(@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                         @RequestParam(value = "userName", required = false) String userName,
                                                         HttpServletRequest request){
-        if(Strings.isNullOrEmpty(phoneNumber) || Strings.isNullOrEmpty(userName)){
+        if(Strings.isNullOrEmpty(phoneNumber)){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
         List<UserPojo> userPojoList = administrationDao.queryUserPojoList(phoneNumber, userName);
@@ -864,17 +864,8 @@ public class AdministrationController {
                         }
                     }
                 }
-                List<ScoreDetailPojo> scoreDetailList = administrationDao.getScoreDetailList(userId, 2);
-                Double sum = 0.0;
-                if(scoreDetailList != null){
-                    for(ScoreDetailPojo scoreDetailPojo: scoreDetailList){
-                        sum = sum + scoreDetailPojo.getScoreChange();
-                    }
-                }
-                userInfo.setBalance(sum);
                 userInfoPojo.setUserInfo(userInfo);
                 userInfoPojo.setConsumptionDetailList(consumptionDetailList);
-                userInfoPojo.setScoreDetailList(scoreDetailList);
                 userInfoPojoList.add(userInfoPojo);
             }
         }
