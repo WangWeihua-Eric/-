@@ -13,6 +13,33 @@ public class ScoreWaitPojo {
     private Integer status;
     private Double score;
     private Date updateTime;
+    private String userName;
+    private String phone;
+    private String storeName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public Integer getId() {
         return id;

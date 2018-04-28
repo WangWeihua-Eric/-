@@ -16,6 +16,33 @@ public class ConsumptionOrderPojo {
     private Date updateTime;
     private Integer second;
     private CardPojo cardPojo;
+    private String storeName;
+    private String userName;
+    private String phone;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public Integer getSecond() {
         return second;

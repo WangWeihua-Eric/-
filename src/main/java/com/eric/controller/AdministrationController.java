@@ -1,6 +1,7 @@
 package com.eric.controller;
 
 import com.eric.dao.AdministrationDao;
+import com.eric.dao.EnterDao;
 import com.eric.pojo.*;
 import com.eric.service.IAdministrationService;
 import com.google.common.base.Strings;
@@ -26,6 +27,8 @@ public class AdministrationController {
     private IAdministrationService administrationService;
     @Autowired
     private AdministrationDao administrationDao;
+    @Autowired
+    private EnterDao enterDao;
 
     private String companyIdTemp = "ymhui888";
 
@@ -647,7 +650,24 @@ public class AdministrationController {
         if(consumptionOrderPojoList.size() > 0){
             Date nowDate = new Date();
             for(ConsumptionOrderPojo consumptionOrderPojo: consumptionOrderPojoList){
-                if(consumptionOrderPojo != null && !Strings.isNullOrEmpty(consumptionOrderPojo.getCardId()) && consumptionOrderPojo.getType() != null){
+                if(consumptionOrderPojo == null || Strings.isNullOrEmpty(consumptionOrderPojo.getUserId()) || Strings.isNullOrEmpty(consumptionOrderPojo.getStoreId())){
+                    continue;
+                }
+
+                UserPojo userPojo = administrationDao.queryUserInfoWithUserId(consumptionOrderPojo.getUserId());
+                if(userPojo == null){
+                    continue;
+                }
+                consumptionOrderPojo.setUserName(userPojo.getName());
+                consumptionOrderPojo.setPhone(userPojo.getPhoneNumber());
+
+                String storeName = enterDao.getName(consumptionOrderPojo.getStoreId());
+                if(storeName == null){
+                    continue;
+                }
+                consumptionOrderPojo.setStoreName(storeName);
+
+                if(!Strings.isNullOrEmpty(consumptionOrderPojo.getCardId()) && consumptionOrderPojo.getType() != null){
                     if(consumptionOrderPojo.getType().equals(1)){
                         //时间卡
                         CardPojo cardPojo = administrationDao.getTimeCardInfo(Integer.valueOf(consumptionOrderPojo.getCardId()));
@@ -791,6 +811,13 @@ public class AdministrationController {
                 if(scoreWaitPojoList != null){
                     for(ScoreWaitPojo scoreWaitPojo: scoreWaitPojoList){
                         if(scoreWaitPojo != null){
+                            scoreWaitPojo.setUserName(userPojo.getName());
+                            scoreWaitPojo.setPhone(userPojo.getPhoneNumber());
+                            String storeName = enterDao.getName(userPojo.getStoreId());
+                            if(storeName == null){
+                                continue;
+                            }
+                            scoreWaitPojo.setStoreName(storeName);
                             scoreWaitPojos.add(scoreWaitPojo);
                         }
                     }
