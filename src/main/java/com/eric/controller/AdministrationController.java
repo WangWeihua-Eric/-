@@ -714,7 +714,7 @@ public class AdministrationController {
 //                                }
                                 consumptionOrderPojos.add(consumptionOrderPojo);
                             }
-                            consumptionOrderPojos.add(consumptionOrderPojo);
+//                            consumptionOrderPojos.add(consumptionOrderPojo);
                         }
                     }
                 }
@@ -739,6 +739,16 @@ public class AdministrationController {
                                 @RequestParam(value = "evaluation", required = false) Integer evaluation,
                                 @RequestParam(value = "status", required = false) Integer status,
                                 HttpServletRequest request){
+        if(status == null || status == 0){
+            return null;
+        }
+        if(evaluation == null){
+            evaluation = 3;
+        }
+        if(reason == null){
+            reason = "";
+        }
+        administrationDao.updateConsumptionOrderEvaliationAndRean(id, reason, evaluation, status);
         return null;
     }
 
@@ -839,7 +849,7 @@ public class AdministrationController {
     public Object platformSettlementScoreExchangeWithId(@RequestParam(value = "id", required = false) Integer id,
                                            @RequestParam(value = "status", required = false) Integer status,
                                            HttpServletRequest request){
-
+        administrationDao.updateScoreWait(id, status);
         return null;
     }
 

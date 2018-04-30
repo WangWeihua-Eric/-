@@ -563,6 +563,14 @@ public interface AdministrationDao {
                                 @Param("status") Integer status);
 
     /**
+     * 刷新订单核销
+     */
+    void updateConsumptionOrderEvaliationAndRean(@Param("id") Integer id,
+                                                 @Param("reason") String reason,
+                                                 @Param("evaluation") Integer evaluation,
+                                                 @Param("status") Integer status);
+
+    /**
      * 查询待核销
      */
     Integer getConsumptionOrderId(@Param("userId") String userId,

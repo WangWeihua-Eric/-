@@ -1131,4 +1131,10 @@
         AND store_id = #{storeId}
         AND status = 0
     </select>
+
+    <update id="updateConsumptionOrderEvaliationAndRean">
+        UPDATE consumption_order
+        SET status = #{status}, update_time = now(), evaluation = #{evaluation}, remarks = #{reason}
+        WHERE id = #{id}
+    </update>
 </mapper>
