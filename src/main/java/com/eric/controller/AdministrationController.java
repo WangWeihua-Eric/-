@@ -3,10 +3,14 @@ package com.eric.controller;
 import com.eric.dao.AdministrationDao;
 import com.eric.dao.EnterDao;
 import com.eric.pojo.*;
+import com.eric.rpc.ConvertCardDetailRsp;
+import com.eric.rpc.RPC;
 import com.eric.service.IAdministrationService;
 import com.google.common.base.Strings;
+import com.qunar.mobile.car.common.util.JsonUtil;
 import com.qunar.mobile.car.qb.drivcommon.enums.CommonBaseStatus;
 import com.qunar.mobile.car.qb.drivcommon.exception.BaseException;
+import org.codehaus.jackson.type.TypeReference;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +33,8 @@ public class AdministrationController {
     private AdministrationDao administrationDao;
     @Autowired
     private EnterDao enterDao;
+    @Autowired
+    private RPC rpc;
 
     private String companyIdTemp = "ymhui888";
 
@@ -308,11 +314,38 @@ public class AdministrationController {
         if(Strings.isNullOrEmpty(reason)){
             reason = "";
         }
+        String userPhone = administrationDao.getUserPhone(userId);
+        if(type == 3){
+            if(Strings.isNullOrEmpty(giveCardId)){
+                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+            }
+            ConvertCardDetailReqPojo req = new ConvertCardDetailReqPojo();
+            req.setPhone(userPhone);
+            req.setCard_no(giveCardId);
+            try {
+                String convertCardDetailRspBaseRsp = rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/convertCardDetail");
+                ConvertCardDetailRsp convertCardDetailRsp = JsonUtil.fromJson(convertCardDetailRspBaseRsp,
+                        new TypeReference<ConvertCardDetailRsp>() {
+                        });
+                if(convertCardDetailRsp == null || convertCardDetailRsp.getCode() != 200){
+                    throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+                }
+                convertCardDetailRspBaseRsp = rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/convertCardUse");
+                convertCardDetailRsp = JsonUtil.fromJson(convertCardDetailRspBaseRsp,
+                        new TypeReference<ConvertCardDetailRsp>() {
+                        });
+                if(convertCardDetailRsp == null || convertCardDetailRsp.getCode() != 200){
+                    throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+                }
+            }catch (Exception e){
+                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
+            }
+        }
         administrationDao.insertOrder(userId, storeId, renewProject, giveProject, courseOfTreatment, day, price, storePoint, type, technicianId, reason, point, giveCardId);
         String orderId = administrationDao.queryOrderId(userId, storeId);
         String projectName = administrationDao.getProjectName(renewProject);
         String userName = administrationDao.getUserName(userId);
-        String userPhone = administrationDao.getUserPhone(userId);
+
         if(day != null){
             administrationDao.insertTimeCard(userId, storeId, orderId, renewProject, day);
             Integer cardId = administrationDao.queryCardIdTime(userId, storeId, orderId);
