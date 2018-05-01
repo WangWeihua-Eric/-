@@ -592,8 +592,8 @@ public class AdministrationController {
                                     @RequestParam(value = "storeId", required = false) String storeId,
                                     @RequestParam(value = "cardId", required = false) String cardId,
                                     @RequestParam(value = "type", required = false) Integer type,
-                                        @RequestParam(value = "status", required = false) Integer status,
-                                     @RequestParam(value = "technicianId", required = false) String technicianId,
+                                    @RequestParam(value = "status", required = false) Integer status,
+                                    @RequestParam(value = "technicianId", required = false) String technicianId,
                                     @RequestParam(value = "remarks", required = false) String remarks,
                                      HttpServletRequest request){
         if(Strings.isNullOrEmpty(userId) || Strings.isNullOrEmpty(storeId) || Strings.isNullOrEmpty(technicianId) || Strings.isNullOrEmpty(cardId)){
@@ -631,11 +631,26 @@ public class AdministrationController {
                 Double fee = administrationDao.getProjectFee(projectId);
                 int size = technicianIdArray.length;
                 Double temp = fee / size;
+                Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
+                EvaluationPojo evaluationPojo = null;
+                if(id == null){
+                    evaluationPojo = administrationDao.getConsumptionOrderEvaluationPojo(userId, storeId, cardId, projectName, 1, type);
+                }
+                Integer evaluation = 0;
+                String evaluationRemarks = "";
+                if(evaluationPojo != null){
+                    if(evaluationPojo.getEvaluation() != null){
+                        evaluation = evaluationPojo.getEvaluation();
+                    }
+                    if(!Strings.isNullOrEmpty(evaluationPojo.getEvaluationRemarks())){
+                        evaluationRemarks = evaluationPojo.getEvaluationRemarks();
+                    }
+                }
                 for (int i = 0; i < technicianIdArray.length; i++) {
                     administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, process, technicianIdArray[i], temp, "核销", "", remarks);
                 }
                 administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId, remarks);
-                Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
+
                 if(id != null){
                     administrationDao.updateConsumptionOrder(id, 1);
                 }
@@ -648,11 +663,29 @@ public class AdministrationController {
                 Double fee = administrationDao.getProjectFee(projectId);
                 int size = technicianIdArray.length;
                 Double temp = fee / size;
+
+                Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
+
+                EvaluationPojo evaluationPojo = null;
+                if(id == null){
+                    evaluationPojo = administrationDao.getConsumptionOrderEvaluationPojo(userId, storeId, cardId, projectName, 1, type);
+                }
+                Integer evaluation = 0;
+                String evaluationRemarks = "";
+                if(evaluationPojo != null){
+                    if(evaluationPojo.getEvaluation() != null){
+                        evaluation = evaluationPojo.getEvaluation();
+                    }
+                    if(!Strings.isNullOrEmpty(evaluationPojo.getEvaluationRemarks())){
+                        evaluationRemarks = evaluationPojo.getEvaluationRemarks();
+                    }
+                }
+
                 for (int i = 0; i < technicianIdArray.length; i++) {
                     administrationDao.insertConsumptionDetail(userId, projectName, 0.0, limit, (int)diff, technicianIdArray[i], temp, "核销", "", remarks);
                 }
                 administrationDao.insertAchievement("时间卡：" + cardId, projectName, 0.0, userName, userPhone, "核销", technicianId, "", storeId, remarks);
-                Integer id = administrationDao.getConsumptionOrderId(userId, storeId, cardId, projectName, 0, type);
+
                 if(id != null){
                     administrationDao.updateConsumptionOrder(id, 1);
                 }

@@ -170,6 +170,11 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="EvaluationPojo" type="com.eric.pojo.EvaluationPojo">
+        <result column="evaluation" property="evaluation"/>
+        <result column="evaluationRemarks" property="evaluation_remarks"/>
+    </resultMap>
+
     <select id="getUserListWithPage" resultMap="UserPojo">
         SELECT user_id, phone, user_name, sex, birthday_time
         FROM users
@@ -841,6 +846,19 @@
 
     <select id="getConsumptionOrderId" resultType="Integer">
         SELECT id
+        FROM consumption_order
+        WHERE user_id = #{userId}
+        AND store_id = #{storeId}
+        AND card_id = #{cardId}
+        AND project_name = #{projectName}
+        AND status = #{status}
+        AND type = #{type}
+        ORDER BY update_time DESC
+        limit 1
+    </select>
+
+    <select id="getConsumptionOrderEvaluationPojo" resultType="EvaluationPojo">
+        SELECT evaluation, evaluation_remarks
         FROM consumption_order
         WHERE user_id = #{userId}
         AND store_id = #{storeId}

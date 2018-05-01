@@ -581,6 +581,16 @@ public interface AdministrationDao {
                                   @Param("type") Integer type);
 
     /**
+     * 获取评星
+     */
+    EvaluationPojo getConsumptionOrderEvaluationPojo(@Param("userId") String userId,
+                                  @Param("storeId") String storeId,
+                                  @Param("cardId") String cardId,
+                                  @Param("projectName") String projectName,
+                                  @Param("status") Integer status,
+                                  @Param("type") Integer type);
+
+    /**
      * 插入积分待消费队列
      */
     void insertScoreWait(@Param("userId") String userId,
