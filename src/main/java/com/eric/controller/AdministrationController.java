@@ -370,6 +370,17 @@ public class AdministrationController {
             administrationDao.insertConsumptionDetail(userId, giveProjectName, 0.0, giveCourseOfTreatment, 0, "", 0.0, "生单赠送", "", reason);
             administrationDao.insertAchievement("疗程卡：" + cardId, projectName, 0.0, userName, userPhone, "开单", technicianId, typeTemp, storeId, reason);
         }
+        if(point >= 1){
+            try{
+                ConvertCardDetailReqPojo req = new ConvertCardDetailReqPojo();
+                req.setPhone(userPhone);
+                req.setSource_remark("平台生单");
+                req.setPoint(point.intValue());
+                rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/sendUserScore");
+            }catch (Exception e){
+
+            }
+        }
         return "ok";
     }
 

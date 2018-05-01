@@ -43,22 +43,10 @@ public class HelloMvcController {
 
         ConvertCardDetailReqPojo req = new ConvertCardDetailReqPojo();
         req.setPhone("13989275543");
-        req.setCard_no("24160612");
         try {
-            String convertCardDetailRspBaseRsp = rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/convertCardDetail");
-            ConvertCardDetailRsp convertCardDetailRsp = JsonUtil.fromJson(convertCardDetailRspBaseRsp,
-                    new TypeReference<ConvertCardDetailRsp>() {
-                    });
-            if(convertCardDetailRsp == null || convertCardDetailRsp.getCode() != 200){
-                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
-            }
-            convertCardDetailRspBaseRsp = rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/convertCardUse");
-            convertCardDetailRsp = JsonUtil.fromJson(convertCardDetailRspBaseRsp,
-                    new TypeReference<ConvertCardDetailRsp>() {
-                    });
-            if(convertCardDetailRsp == null || convertCardDetailRsp.getCode() != 200){
-                throw new BaseException(CommonBaseStatus.PARAM_ERROR);
-            }
+            req.setSource_remark("平台生单");
+            req.setPoint(10);
+            rpc.queryListByCondition(req, "https://api.xhhmei.com/Open/sendUserScore");
         }catch (Exception e){
             throw new BaseException(CommonBaseStatus.PARAM_ERROR);
         }
