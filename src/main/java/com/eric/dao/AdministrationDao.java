@@ -162,7 +162,9 @@ public interface AdministrationDao {
                                  @Param("fee") Double fee,
                                  @Param("reason") String reason,
                                  @Param("orderId") String orderId,
-                                 @Param("remarks") String remarks);
+                                 @Param("remarks") String remarks,
+                                 @Param("evaluation") Integer evaluation,
+                                 @Param("evaluationRemarks") String evaluationRemarks);
 
     /**
      * 获取积分流水
@@ -726,7 +728,9 @@ public interface AdministrationDao {
                            @Param("technicianIds") String technicianId,
                            @Param("type") String type,
                            @Param("storeId") String storeId,
-                           @Param("remarks") String remarks);
+                           @Param("remarks") String remarks,
+                           @Param("evaluation") Integer evaluation,
+                           @Param("evaluationRemarks") String evaluationRemarks);
 
     /**
      * 获取时间卡id

@@ -18,6 +18,24 @@ public class AchievementPojo {
     private String storeId;
     private Date time;
     private String remarks;
+    private Integer evaluation;
+    private String evaluationRemarks;
+
+    public Integer getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(Integer evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public String getEvaluationRemarks() {
+        return evaluationRemarks;
+    }
+
+    public void setEvaluationRemarks(String evaluationRemarks) {
+        this.evaluationRemarks = evaluationRemarks;
+    }
 
     public String getRemarks() {
         return remarks;

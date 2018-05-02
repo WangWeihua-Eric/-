@@ -12,6 +12,24 @@ public class ConsumptionDetailPojo {
     private String reason;
     private String remarks;
     private String orderId;
+    private Integer evaluation;
+    private String evaluationRemarks;
+
+    public Integer getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(Integer evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public String getEvaluationRemarks() {
+        return evaluationRemarks;
+    }
+
+    public void setEvaluationRemarks(String evaluationRemarks) {
+        this.evaluationRemarks = evaluationRemarks;
+    }
 
     public String getOrderId() {
         return orderId;

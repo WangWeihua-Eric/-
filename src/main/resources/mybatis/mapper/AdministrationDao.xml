@@ -84,6 +84,8 @@
         <result column="technicians_name" property="techniciansName"/>
         <result column="type" property="type"/>
         <result column="remarks" property="remarks"/>
+        <result column="evaluation" property="evaluation"/>
+        <result column="evaluation_remarks" property="evaluationRemarks"/>
     </resultMap>
 
     <resultMap id="ScoreDetailPojo" type="com.eric.pojo.ScoreDetailPojo">
@@ -101,6 +103,8 @@
         <result column="reason" property="reason"/>
         <result column="remarks" property="remarks"/>
         <result column="order_id" property="orderId"/>
+        <result column="evaluation" property="evaluation"/>
+        <result column="evaluation_remarks" property="evaluationRemarks"/>
     </resultMap>
 
     <resultMap id="ConsumptionDetails" type="com.eric.pojo.TechnicianDetailedPojo">
@@ -517,7 +521,7 @@
     </select>
 
     <select id="getAchievementPojoList" resultMap="AchievementPojo">
-        SELECT card_id, card_type, create_time, project_name, price, user_name, user_phone, reason, technicians_id, type, remarks
+        SELECT card_id, card_type, create_time, project_name, price, user_name, user_phone, reason, technicians_id, type, remarks, evaluation, evaluation_remarks
         FROM achievement
         WHERE store_id = #{storeId}
         AND (create_time BETWEEN #{beginTime} and #{endTime})
@@ -587,15 +591,15 @@
 
     <insert id="insertConsumptionDetail">
         INSERT INTO consumption_detail(
-        user_id, project_name, day, process, price, create_time, update_time, technician_id, once_fee, reason, order_id, remarks
+        user_id, project_name, day, process, price, create_time, update_time, technician_id, once_fee, reason, order_id, remarks, evaluation, evaluation_remarks
         )
         VALUES (
-        #{userId}, #{projectName}, #{day}, #{process}, #{price}, now(), now(), #{technicianId}, #{fee}, #{reason}, #{orderId}, #{remarks}
+        #{userId}, #{projectName}, #{day}, #{process}, #{price}, now(), now(), #{technicianId}, #{fee}, #{reason}, #{orderId}, #{remarks}, #{evaluation}, #{evaluationRemarks}
         )
     </insert>
 
     <select id="getConsumptionDetailList" resultMap="ConsumptionDetailPojo">
-        SELECT project_name, day, process, price, create_time, reason, remarks, order_id
+        SELECT project_name, day, process, price, create_time, reason, remarks, order_id, evaluation, evaluation_remarks
         FROM consumption_detail
         WHERE user_id = #{userId}
         ORDER BY create_time DESC
@@ -1019,10 +1023,10 @@
 
     <insert id="insertAchievement">
         INSERT INTO achievement(
-        card_id, project_name, price, user_name, user_phone, reason, technicians_id, type, store_id, create_time, update_time, remarks
+        card_id, project_name, price, user_name, user_phone, reason, technicians_id, type, store_id, create_time, update_time, remarks, evaluation, evaluation_remarks
         )
         VALUES (
-        #{cardId}, #{projectName}, #{price}, #{userName}, #{userPhone}, #{reason}, #{technicianIds}, #{type}, #{storeId}, now(), now(), #{remarks}
+        #{cardId}, #{projectName}, #{price}, #{userName}, #{userPhone}, #{reason}, #{technicianIds}, #{type}, #{storeId}, now(), now(), #{remarks}, #{evaluation}, #{evaluationRemarks}
         )
     </insert>
 
