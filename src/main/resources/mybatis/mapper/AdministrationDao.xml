@@ -176,7 +176,7 @@
 
     <resultMap id="EvaluationPojo" type="com.eric.pojo.EvaluationPojo">
         <result column="evaluation" property="evaluation"/>
-        <result column="evaluationRemarks" property="evaluation_remarks"/>
+        <result column="remarks" property="evaluationRemarks"/>
     </resultMap>
 
     <select id="getUserListWithPage" resultMap="UserPojo">
@@ -861,8 +861,8 @@
         limit 1
     </select>
 
-    <select id="getConsumptionOrderEvaluationPojo" resultType="EvaluationPojo">
-        SELECT evaluation, evaluation_remarks
+    <select id="getConsumptionOrderEvaluationPojo" resultMap="EvaluationPojo">
+        SELECT evaluation, remarks
         FROM consumption_order
         WHERE user_id = #{userId}
         AND store_id = #{storeId}
