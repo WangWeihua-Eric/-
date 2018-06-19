@@ -168,13 +168,6 @@ public class AdministrationController {
         return projectTwoPojoList;
     }
 
-    /**
-     * 更新门店一级项目名
-     * @param storeId
-     * @param projectId
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/project/one/update")
     @ResponseBody
     public Object updateProjectOne(@RequestParam(value = "storeId", required = false) String storeId,
@@ -188,12 +181,6 @@ public class AdministrationController {
         return "ok";
     }
 
-    /**
-     * 技师列表接口
-     * @param storeId
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technician/list")
     @ResponseBody
     public Object getTechnicianList(@RequestParam(value = "storeId", required = false) String storeId,
@@ -746,7 +733,6 @@ public class AdministrationController {
 
                 if(!Strings.isNullOrEmpty(consumptionOrderPojo.getCardId()) && consumptionOrderPojo.getType() != null){
                     if(consumptionOrderPojo.getType().equals(1)){
-                        //时间卡
                         CardPojo cardPojo = administrationDao.getTimeCardInfo(Integer.valueOf(consumptionOrderPojo.getCardId()));
                         if(cardPojo != null){
                             Integer limit = cardPojo.getLimit();
@@ -771,7 +757,6 @@ public class AdministrationController {
                             }
                         }
                     }else {
-                        //疗程卡
                         CardPojo cardPojo = administrationDao.getCurseCardInfo(Integer.valueOf(consumptionOrderPojo.getCardId()));
                         if(cardPojo != null){
                             Integer limit = cardPojo.getLimit();
@@ -1053,7 +1038,6 @@ public class AdministrationController {
         String userName = administrationDao.getUserName(userId);
         String userPhone = administrationDao.getUserPhone(userId);
         if(type == 1){
-            //时间卡
             Integer status = administrationDao.getTimeCardStatus(Integer.valueOf(cardId));
             if(status == 1){
                 return "该卡已经结束";
@@ -1072,7 +1056,6 @@ public class AdministrationController {
             administrationDao.insertAchievement("时间卡：" + cardId, projectName, fee, userName, userPhone, "退卡", "", "", storeId, "", 0, "");
             administrationDao.insertConsumptionDetail(userId, projectName, fee, 0, 0, "", 0.0, "退卡", id, "", 0, "");
         }else {
-            //疗程卡
             Integer status = administrationDao.getCardStatus(Integer.valueOf(cardId));
             if(status == 1){
                 return "该卡已结束";
@@ -1136,12 +1119,6 @@ public class AdministrationController {
         return "ok";
     }
 
-    /**
-     * 技师详情
-     * @param technicianId
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technicians/info")
     @ResponseBody
     public Object technicianInfo(@RequestParam(value = "technicianId", required = false) String technicianId,
@@ -1192,17 +1169,6 @@ public class AdministrationController {
         return technicianPojo;
     }
 
-    /**
-     * 技师详情更新接口
-     * @param storeId
-     * @param technicianId
-     * @param name
-     * @param phone
-     * @param level
-     * @param grad
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technicians/update/info")
     @ResponseBody
     public Object updateTechnicianInfo(@RequestParam(value = "storeId", required = false) String storeId,
@@ -1220,16 +1186,6 @@ public class AdministrationController {
         return "ok";
     }
 
-    /**
-     * 技师业绩
-     * @param storeId
-     * @param technicianId
-     * @param beginTime
-     * @param endTime
-     * @param type
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technicians/detailed")
     @ResponseBody
     public Object technicianDetailed(@RequestParam(value = "storeId", required = false) String storeId,
@@ -1274,15 +1230,6 @@ public class AdministrationController {
         return technicianDetailedPojoList;
     }
 
-    /**
-     * 新增技师
-     * @param name
-     * @param phone
-     * @param level
-     * @param storeId
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technicians/add")
     @ResponseBody
     public Object technicianAdd(@RequestParam(value = "name", required = false) String name,
@@ -1303,13 +1250,6 @@ public class AdministrationController {
         return "ok";
     }
 
-    /**
-     * 删除技师
-     * @param technicianId
-     * @param storeId
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/technicians/delate")
     @ResponseBody
     public Object technicianDelate(@RequestParam(value = "technicianId", required = false) String technicianId,
